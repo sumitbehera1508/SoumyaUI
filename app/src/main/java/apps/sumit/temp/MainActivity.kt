@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import apps.sumit.temp.presentation.form.InputDetailsScreen
 import apps.sumit.temp.ui.theme.TempTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,29 +19,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             TempTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                Show()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun Show() {
+    InputDetailsScreen()
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     TempTheme {
-        Greeting("Android")
+        Show()
     }
 }
