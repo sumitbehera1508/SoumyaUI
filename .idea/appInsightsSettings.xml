@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="apps.sumit.temp" />
+                  <option name="mobileSdkAppId" value="1:27973859899:android:80988e9ea0856324defa1e" />
+                  <option name="projectId" value="temp-7cb34" />
+                  <option name="projectNumber" value="27973859899" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
