@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "27973859899",
+    "project_id": "temp-7cb34",
+    "storage_bucket": "temp-7cb34.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27973859899:android:80988e9ea0856324defa1e",
+        "android_client_info": {
+          "package_name": "apps.sumit.temp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe-zStiA4IOm41MZolE4sf15dIY7mTVkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
