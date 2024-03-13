@@ -22,10 +22,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import apps.sumit.temp.presentation.form.components.CustomDatePicker
 import apps.sumit.temp.presentation.form.components.CustomDropDownList
+import apps.sumit.temp.presentation.form.components.CustomFileChooser
 import apps.sumit.temp.presentation.form.components.CustomTextField
+import apps.sumit.temp.util.DropDownData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,6 +37,8 @@ fun InputDetailsScreen(
     modifier: Modifier = Modifier
         .fillMaxSize(),
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         modifier = modifier
             .background(Color.Transparent),
@@ -90,7 +96,7 @@ fun InputDetailsScreen(
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
-                )
+                ),
             )
 
             CustomTextField(
@@ -107,14 +113,26 @@ fun InputDetailsScreen(
             )
 
             CustomDropDownList(
-                label = "Branch",
+                label = "Select your branch",
                 onTextChange = {/*TODO*/ },
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
                 ),
-                options = listOf("Mca", "Bca")
+                options = DropDownData().branchList
             )
+
+            CustomFileChooser(
+                onUriDetect = {/*TODO*/ },
+                label = "Enter I card",
+                successMessage = "Done",
+                modifier = Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                ),
+                showImage = true
+            )
+
             CustomTextField(
                 text = "johndoe@email.com",
                 onTextChange = {/*TODO*/ },
@@ -127,11 +145,65 @@ fun InputDetailsScreen(
                     vertical = 8.dp
                 )
             )
+
+            CustomDropDownList(
+                label = "Select your gender",
+                onTextChange = {/*TODO*/ },
+                modifier = Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                ),
+                options = DropDownData().genderList
+            )
+
+            CustomDatePicker(
+                context = context,
+                label = "Enter your date of birth",
+                onTextChange = {/*TODO*/ },
+                modifier = Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                ),
+                successMessage = "Date of birth added !"
+            )
+
+            CustomDropDownList(
+                label = "Enter type of event",
+                onTextChange = {/*TODO*/ },
+                options = DropDownData().eventTypeList,
+                modifier = Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                ),
+            )
+
+            CustomDatePicker(
+                context = context,
+                label = "Enter Starting date",
+                onTextChange = {/*TODO*/ },
+                modifier = Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                ),
+                successMessage = "Starting date added !"
+            )
+
+            CustomDatePicker(
+                context = context,
+                label = "Enter Ending date",
+                onTextChange = {/*TODO*/ },
+                modifier = Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                ),
+                successMessage = "Ending date added !"
+            )
+
             CustomTextField(
-                text = "John Doe",
+                text = "Bhubaneswar",
                 onTextChange = {/*TODO*/ },
                 onTrailingIconClick = { /*TODO*/ },
-                hints = "Enter your full name",
+                hints = "Enter the location of event",
                 keyboardType = KeyboardType.Text,
                 maxDigit = 20,
                 modifier = Modifier.padding(
@@ -139,17 +211,38 @@ fun InputDetailsScreen(
                     vertical = 8.dp
                 )
             )
-            CustomTextField(
-                text = "John Doe",
-                onTextChange = {/*TODO*/ },
-                onTrailingIconClick = { /*TODO*/ },
-                hints = "Enter your full name",
-                keyboardType = KeyboardType.Text,
-                maxDigit = 20,
+
+            CustomFileChooser(
+                onUriDetect = {/*TODO*/ },
+                label = "Enter proof of event",
+                successMessage = "Proof of event added Successfully",
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
-                )
+                ),
+                showImage = true
+            )
+
+            CustomFileChooser(
+                onUriDetect = {/*TODO*/ },
+                label = "Enter bill images",
+                successMessage = "Bill images added Successfully",
+                modifier = Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                ),
+                showImage = true
+            )
+
+            CustomFileChooser(
+                onUriDetect = {/*TODO*/ },
+                label = "Enter your signature",
+                successMessage = "Signature added Successfully",
+                modifier = Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                ),
+                showImage = true
             )
         }
     }
