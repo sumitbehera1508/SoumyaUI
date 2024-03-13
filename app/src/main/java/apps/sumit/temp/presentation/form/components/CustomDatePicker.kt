@@ -5,9 +5,11 @@ import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -21,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import apps.sumit.temp.ui.theme.primaryColor
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -106,9 +110,15 @@ fun CustomDatePicker(
     context: Context,
     label: String,
     onTextChange: (String) -> Unit,
+    successMessage: String = "Done",
+    errorMessage: String = "Enter a valid Date",
 ) {
+    var isError by remember {
+        mutableStateOf(false)
+    }
 
     val icon = Icons.Filled.DateRange
+    val dateRegex = "^(3[01]|[12][0-9]|0[1-9]|[1-9])/(1[0-2]|0[1-9]|[1-9])/[0-9]{4}$".toRegex()
 
     var pickedDate by remember {
         mutableStateOf(LocalDate.now())
@@ -143,7 +153,12 @@ fun CustomDatePicker(
             onValueChange = {
                 mSelectedText = it
                 onTextChange(it)
+                isError = false
+                if (!dateRegex.matches(it)) {
+                    isError = true
+                }
             },
+            isError = isError,
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
@@ -174,7 +189,7 @@ fun CustomDatePicker(
             buttons = {
                 // on the accept button clicked
                 positiveButton("Ok") {
-                    Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
                 }
                 // on cancel button clicked
                 negativeButton("Cancel") {
@@ -193,9 +208,20 @@ fun CustomDatePicker(
                 }
             ) {
                 pickedDate = it
+                isError = false
                 mSelectedText = formattedDate.toString()
+                onTextChange(mSelectedText)
             }
 
+        }
+        if (isError) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.padding(start = 16.dp),
+                fontSize = 10.sp
+            )
         }
     }
 
