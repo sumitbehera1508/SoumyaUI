@@ -13,16 +13,20 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import apps.sumit.temp.ui.theme.fingerGrey
+import androidx.compose.ui.unit.toSize
 import apps.sumit.temp.ui.theme.primaryColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,39 +49,37 @@ fun CustomTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    var mSelectedText by remember { mutableStateOf("") }
+
+    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
+
+
+    Column(modifier = modifier.fillMaxWidth()) {
         OutlinedTextField(
-            value = text,
+            value = mSelectedText,
             onValueChange = {
-                if (it.length <= maxDigit) {
-                    onTextChange(it)
-                }
+                mSelectedText = it
+                onTextChange(it)
             },
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    // This value is used to assign to
+                    // the DropDown the same width
+                    mTextFieldSize = coordinates.size.toSize()
+                },
+            label = { Text(hints) },
+            isError = isError,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
                 unfocusedContainerColor = Color.White,
                 disabledContainerColor = Color.White,
-                cursorColor = if (text.isEmpty()) fingerGrey else primaryColor,
+                // cursorColor = if (mSelectedText.isEmpty()) fingerGrey else primaryColor,
                 focusedBorderColor = primaryColor,
-                unfocusedBorderColor = if (text.isEmpty()) fingerGrey else primaryColor,
-                disabledBorderColor = if (text.isEmpty()) fingerGrey else primaryColor,
-                focusedLabelColor = if (text.isEmpty()) fingerGrey else primaryColor,
+                unfocusedBorderColor = primaryColor,
+//                disabledBorderColor = if (mSelectedText.isEmpty()) fingerGrey else primaryColor,
+//                focusedLabelColor = if (mSelectedText.isEmpty()) fingerGrey else primaryColor,
             ),
-            label = { Text(text = hints) },
-            isError = isError,
-            textStyle = TextStyle(color = Color.Black, fontSize = 15.sp),
-            /*        leadingIcon = {
-                        imageVector?.let {
-                            Icon(
-                                painter = it,
-                                contentDescription = "icon",
-                                tint = if (text.isNotEmpty()) primaryColor else MaterialTheme.colors.onSurface.copy(
-                                    alpha = ContentAlpha.disabled
-                                )
-                            )
-                        }
-                    }*/
             trailingIcon = {
                 imageVectorTrailing?.let {
                     Image(
