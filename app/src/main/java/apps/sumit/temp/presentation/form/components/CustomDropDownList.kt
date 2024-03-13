@@ -104,6 +104,8 @@ fun CustomDropDownList(
                 DropdownMenuItem(
                     onClick = {
                         mSelectedText = label
+                        onTextChange(label)
+                        isError = false
                         mExpanded = false
                     },
                     text = { Text(text = label) }
