@@ -3,6 +3,7 @@ package apps.sumit.temp.presentation.form.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -23,8 +25,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import apps.sumit.temp.ui.theme.fingerGrey
 import apps.sumit.temp.ui.theme.primaryColor
 
 @Composable
@@ -32,11 +35,13 @@ fun CustomDropDownList(
     label: String,
     onTextChange: (String) -> Unit,
     options: List<String>,
+    errorMessage: String = "Select a valid Entry",
     modifier: Modifier = Modifier,
 ) {
     var mExpanded by remember { mutableStateOf(false) }
-
-
+    var isError by remember {
+        mutableStateOf(false)
+    }
 // Create a string value to store the selected city
     var mSelectedText by remember { mutableStateOf("") }
 
@@ -59,6 +64,8 @@ fun CustomDropDownList(
             onValueChange = {
                 mSelectedText = it
                 onTextChange(it)
+                isError = false
+                isError = it !in options
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -68,13 +75,14 @@ fun CustomDropDownList(
                     mTextFieldSize = coordinates.size.toSize()
                 },
             label = { Text(label) },
+            isError = isError,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
                 unfocusedContainerColor = Color.White,
                 disabledContainerColor = Color.White,
-               // cursorColor = if (mSelectedText.isEmpty()) fingerGrey else primaryColor,
+                // cursorColor = if (mSelectedText.isEmpty()) fingerGrey else primaryColor,
                 focusedBorderColor = primaryColor,
-                unfocusedBorderColor =  primaryColor ,
+                unfocusedBorderColor = primaryColor,
 //                disabledBorderColor = if (mSelectedText.isEmpty()) fingerGrey else primaryColor,
 //                focusedLabelColor = if (mSelectedText.isEmpty()) fingerGrey else primaryColor,
             ),
@@ -102,5 +110,15 @@ fun CustomDropDownList(
                 )
             }
         }
+        if (isError) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.padding(start = 16.dp),
+                fontSize = 10.sp
+            )
+        }
     }
+
 }
