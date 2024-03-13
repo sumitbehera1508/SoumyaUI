@@ -1,5 +1,6 @@
 package apps.sumit.temp.presentation.form
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -19,16 +21,24 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import apps.sumit.temp.domain.models.EventData
+import apps.sumit.temp.presentation.form.components.CustomBottomSheet
 import apps.sumit.temp.presentation.form.components.CustomDatePicker
 import apps.sumit.temp.presentation.form.components.CustomDropDownList
 import apps.sumit.temp.presentation.form.components.CustomFileChooser
 import apps.sumit.temp.presentation.form.components.CustomTextField
+import apps.sumit.temp.ui.theme.fingerGrey
+import apps.sumit.temp.ui.theme.primaryColor
 import apps.sumit.temp.util.DropDownData
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,6 +48,17 @@ fun InputDetailsScreen(
         .fillMaxSize(),
 ) {
     val context = LocalContext.current
+    val eventData = remember {
+        mutableStateOf(EventData())
+    }
+
+    var bottomSheetShow by remember {
+        mutableStateOf(false)
+    }
+
+    var isActive by remember {
+        mutableStateOf(false)
+    }
 
     Scaffold(
         modifier = modifier
@@ -66,10 +87,22 @@ fun InputDetailsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = primaryColor
+                        )
+                    ) {
                         Text(text = "b1")
                     }
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(
+                        onClick = {
+                            bottomSheetShow = true
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (isActive) primaryColor else fingerGrey
+                        )
+                    ) {
                         Text(text = "b2")
                     }
                 }
@@ -88,7 +121,10 @@ fun InputDetailsScreen(
         ) {
             CustomTextField(
                 text = "John Doe",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.name = text
+                    isActive = eventData.value.isComplete()
+                },
                 onTrailingIconClick = { /*TODO*/ },
                 hints = "Enter your full name",
                 keyboardType = KeyboardType.Text,
@@ -101,7 +137,10 @@ fun InputDetailsScreen(
 
             CustomTextField(
                 text = "11111111",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.registrationNumber = text
+                    isActive = eventData.value.isComplete()
+                },
                 onTrailingIconClick = { /*TODO*/ },
                 hints = "Enter your registration no",
                 keyboardType = KeyboardType.Number,
@@ -114,7 +153,10 @@ fun InputDetailsScreen(
 
             CustomDropDownList(
                 label = "Select your branch",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.branch = text
+                    isActive = eventData.value.isComplete()
+                },
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
@@ -123,7 +165,10 @@ fun InputDetailsScreen(
             )
 
             CustomFileChooser(
-                onUriDetect = {/*TODO*/ },
+                onUriDetect = { uri ->
+                    eventData.value.iCard = uri
+                    isActive = eventData.value.isComplete()
+                },
                 label = "Enter I card",
                 successMessage = "Done",
                 modifier = Modifier.padding(
@@ -135,7 +180,10 @@ fun InputDetailsScreen(
 
             CustomTextField(
                 text = "johndoe@email.com",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.email = text
+                    isActive = eventData.value.isComplete()
+                },
                 onTrailingIconClick = { /*TODO*/ },
                 hints = "Enter your email",
                 keyboardType = KeyboardType.Email,
@@ -148,7 +196,10 @@ fun InputDetailsScreen(
 
             CustomDropDownList(
                 label = "Select your gender",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.gender = text
+                    isActive = eventData.value.isComplete()
+                },
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
@@ -159,7 +210,10 @@ fun InputDetailsScreen(
             CustomDatePicker(
                 context = context,
                 label = "Enter your date of birth",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.dateOfBirth = text
+                    isActive = eventData.value.isComplete()
+                },
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
@@ -169,7 +223,10 @@ fun InputDetailsScreen(
 
             CustomDropDownList(
                 label = "Enter type of event",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.typeOfEvent = text
+                    isActive = eventData.value.isComplete()
+                },
                 options = DropDownData().eventTypeList,
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
@@ -180,7 +237,10 @@ fun InputDetailsScreen(
             CustomDatePicker(
                 context = context,
                 label = "Enter Starting date",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.startDate = text
+                    isActive = eventData.value.isComplete()
+                },
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
@@ -191,7 +251,10 @@ fun InputDetailsScreen(
             CustomDatePicker(
                 context = context,
                 label = "Enter Ending date",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.endDate = text
+                    isActive = eventData.value.isComplete()
+                },
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
@@ -201,7 +264,10 @@ fun InputDetailsScreen(
 
             CustomTextField(
                 text = "Bhubaneswar",
-                onTextChange = {/*TODO*/ },
+                onTextChange = { text ->
+                    eventData.value.location = text
+                    isActive = eventData.value.isComplete()
+                },
                 onTrailingIconClick = { /*TODO*/ },
                 hints = "Enter the location of event",
                 keyboardType = KeyboardType.Text,
@@ -213,7 +279,10 @@ fun InputDetailsScreen(
             )
 
             CustomFileChooser(
-                onUriDetect = {/*TODO*/ },
+                onUriDetect = { uri ->
+                    eventData.value.eventProof = uri
+                    isActive = eventData.value.isComplete()
+                },
                 label = "Enter proof of event",
                 successMessage = "Proof of event added Successfully",
                 modifier = Modifier.padding(
@@ -224,7 +293,10 @@ fun InputDetailsScreen(
             )
 
             CustomFileChooser(
-                onUriDetect = {/*TODO*/ },
+                onUriDetect = { uri ->
+                    eventData.value.billImage = uri
+                    isActive = eventData.value.isComplete()
+                },
                 label = "Enter bill images",
                 successMessage = "Bill images added Successfully",
                 modifier = Modifier.padding(
@@ -235,7 +307,10 @@ fun InputDetailsScreen(
             )
 
             CustomFileChooser(
-                onUriDetect = {/*TODO*/ },
+                onUriDetect = { uri ->
+                    eventData.value.signature = uri
+                    isActive = eventData.value.isComplete()
+                },
                 label = "Enter your signature",
                 successMessage = "Signature added Successfully",
                 modifier = Modifier.padding(
@@ -245,5 +320,17 @@ fun InputDetailsScreen(
                 showImage = true
             )
         }
+        CustomBottomSheet(
+            showBottomSheet = bottomSheetShow,
+            eventData = eventData,
+            onComplete = {
+                bottomSheetShow = false
+                Toast.makeText(context, "Details Added Successfully", Toast.LENGTH_SHORT).show()
+            },
+            onCancel = {
+                bottomSheetShow = false
+                Toast.makeText(context, "Details not added", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 }
